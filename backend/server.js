@@ -15,7 +15,9 @@ const server = http.createServer(app);
 
 const allowedOrigins = [
     /^http:\/\/localhost:\d+$/,
-    /^http:\/\/127\.0\.0\.1:\d+$/
+    /^http:\/\/127\.0\.0\.1:\d+$/,
+    /^https:\/\/suryasphere-rood\.vercel\.app$/,
+    /^https:\/\/.*\.vercel\.app$/
 ];
 
 const corsOptions = {
