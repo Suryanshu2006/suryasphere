@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
-import { API_URL } from '../config';
 
 export default function Chat({ user, setUser }) {
     const [friends, setFriends] = useState([]);
@@ -30,7 +29,7 @@ export default function Chat({ user, setUser }) {
     const loadFriends = async () => {
         try {
             setLoadingFriends(true);
-            const res = await axios.get(`${API_URL}/api/users`, authHeaders);
+            const res = await axios.get('http://localhost:5000/api/users', authHeaders);
             const friendList = res.data.map((friend) => ({ ...friend, mode: 'friend' }));
 
             setFriends(friendList);
@@ -55,7 +54,7 @@ export default function Chat({ user, setUser }) {
     useEffect(() => {
         loadFriends();
 
-        const socket = io(API_URL, {
+        const socket = io('http://localhost:5000', {
             auth: { token: user.token }
         });
 
@@ -229,7 +228,7 @@ export default function Chat({ user, setUser }) {
             try {
                 setLoadingMessages(true);
                 const res = await axios.get(
-                    `${API_URL}/api/messages/${activeChat.id}`,
+                    `http://localhost:5000/api/messages/${activeChat.id}`,
                     authHeaders
                 );
                 setMessages(res.data);
@@ -294,7 +293,7 @@ export default function Chat({ user, setUser }) {
 
     const deleteMessage = async (messageId) => {
         try {
-            await axios.delete(`${API_URL}/api/messages/${messageId}`, authHeaders);
+            await axios.delete(`http://localhost:5000/api/messages/${messageId}`, authHeaders);
             setMessages((prev) => prev.filter((message) => message.id !== messageId));
             loadFriends();
         } catch (error) {
@@ -314,7 +313,7 @@ export default function Chat({ user, setUser }) {
 
         try {
             await axios.delete(
-                `${API_URL}/api/messages/conversation/${activeChat.id}`,
+                `http://localhost:5000/api/messages/conversation/${activeChat.id}`,
                 authHeaders
             );
             setMessages([]);
@@ -335,7 +334,7 @@ export default function Chat({ user, setUser }) {
         }
 
         try {
-            await axios.delete(`${API_URL}/api/friends/${activeChat.id}`, authHeaders);
+            await axios.delete(`http://localhost:5000/api/friends/${activeChat.id}`, authHeaders);
             setActiveChat(null);
             setMessages([]);
             loadFriends();
