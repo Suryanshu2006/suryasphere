@@ -36,6 +36,10 @@ const io = new Server(server, { cors: corsOptions });
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.json({ status: 'ok', service: 'suryasphere-backend' });
+});
+
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected for Suryasphere'))
     .catch((error) => console.log(error));
@@ -635,4 +639,6 @@ io.on('connection', async (socket) => {
     });
 });
 
-server.listen(5000, () => console.log('Server running on port 5000'));
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
